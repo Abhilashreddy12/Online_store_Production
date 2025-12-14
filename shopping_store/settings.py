@@ -34,7 +34,17 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', 'online-store-qke4.onrender.com'])
+# ALLOWED_HOSTS configuration
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+
+# If ALLOWED_HOSTS is empty, use sensible defaults based on environment
+if not ALLOWED_HOSTS:
+    if DEBUG:
+        # Development: Allow localhost
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    else:
+        # Production: Allow all .onrender.com domains
+        ALLOWED_HOSTS = ['.onrender.com', 'online-store-qke4.onrender.com']
 
 
 # Application definition
