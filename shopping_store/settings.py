@@ -39,11 +39,12 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Always allow Render domain and localhost
 if not ALLOWED_HOSTS or len(ALLOWED_HOSTS) == 0:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com','192.168.0.106']
 
-
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com','192.168.0.106']
 
 INSTALLED_APPS = [
+    'jazzmin',
     'admin_interface',
     'colorfield',
     'django.contrib.admin',
@@ -61,12 +62,18 @@ INSTALLED_APPS = [
     
 ]
 
+
+
 # Channels
 INSTALLED_APPS += ['channels']
 
+# Required for Django to find the URL configuration
+ROOT_URLCONF = 'shopping_store.urls'
+
+# Required Django middleware for admin
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add whitenoise for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,9 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-ROOT_URLCONF = 'shopping_store.urls'
-
+# Required Django templates for admin
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,6 +90,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -95,19 +101,47 @@ TEMPLATES = [
     },
 ]
 
-
-# Channels ASGI application
-ASGI_APPLICATION = 'shopping_store.asgi.application'
-WSGI_APPLICATION = 'shopping_store.wsgi.application'
-
-# Channels/Redis layer config
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [(env('REDIS_HOST', default='127.0.0.1'), int(env('REDIS_PORT', default='6379')))],
-        },
+JAZZMIN_SETTINGS = {
+    "site_title": "Online Store Admin",
+    "site_header": "Online Store Administration",
+    "site_brand": "Online Store",
+    "site_logo": None,  # Set to static path for logo if available
+    "welcome_sign": "Welcome to the Online Store Admin Portal",
+    "copyright": "Online Store © 2025",
+    "search_model": ["catalog.Product", "orders.Order", "customers.Customer"],
+    "user_avatar": None,
+    "show_sidebar": True,
+    "navigation_expanded": False,  # Sidebar collapsed by default
+    "order_with_respect_to": ["catalog", "orders", "customers", "cart"],
+    "custom_links": {
+        "catalog": [{
+            "name": "Product List",
+            "url": "admin:catalog_product_changelist",
+            "icon": "fas fa-list"
+        }],
     },
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "catalog": "fas fa-boxes",
+        "orders": "fas fa-shopping-cart",
+        "customers": "fas fa-user-friends",
+        "cart": "fas fa-shopping-basket",
+        "products.product": "fas fa-tshirt",
+        "catalog.category": "fas fa-tags",
+        "catalog.brand": "fas fa-copyright",
+        "catalog.banner": "fas fa-image",
+        "orders.order": "fas fa-receipt",
+        "customers.customer": "fas fa-user",
+    },
+    "default_icon_parents": "fas fa-folder",  # Folder icon for app headings
+    "default_icon_children": "fas fa-angle-right",  # Arrow for models
+    "related_modal_active": True,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+    "language_chooser": True,
+    "show_view_site": True,  # Show the 'View site' link in the admin
+    "site_url": "/",  # Ensure the 'View site' link points to your homepage
+    "custom_sidebars": {},  # Use default sidebar structure
 }
 
 
@@ -134,7 +168,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': env('DB_NAME', default='clothing_store'),
             'USER': env('DB_USER', default='postgres'),
-            'PASSWORD': env('DB_PASSWORD', default=''),
+            'PASSWORD': env('DB_PASSWORD', default='abhi'),
             'HOST': env('DB_HOST', default='localhost'),
             'PORT': env('DB_PORT', default='5432'),
         }
@@ -214,7 +248,69 @@ else:
     # Development settings
     X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# Admin Interface Configuration
+
+
+# Jazzmin advanced admin UI configuration (professional light theme)
+JAZZMIN_SETTINGS = {
+    "site_title": "Online Store Admin",
+    "site_header": "Online Store Administration",
+    "site_brand": "Online Store",
+    "site_logo": None,  # Set to static path for logo if available
+    "welcome_sign": "Welcome to the Online Store Admin Portal",
+    "copyright": "Online Store © 2025",
+    "search_model": ["catalog.Product", "orders.Order", "customers.Customer"],
+    "user_avatar": None,
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": ["catalog", "orders", "customers", "cart"],
+    "custom_links": {
+        "catalog": [{
+            "name": "Product List",
+            "url": "admin:catalog_product_changelist",
+            "icon": "fas fa-list"
+        }],
+    },
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "catalog": "fas fa-boxes",
+        "orders": "fas fa-shopping-cart",
+        "customers": "fas fa-user-friends",
+        "cart": "fas fa-shopping-basket",
+        "products.product": "fas fa-tshirt",
+        "catalog.category": "fas fa-tags",
+        "catalog.brand": "fas fa-copyright",
+        "catalog.banner": "fas fa-image",
+        "orders.order": "fas fa-receipt",
+        "customers.customer": "fas fa-user",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+    "language_chooser": True,
+    "show_view_site": True,  # Show the 'View site' link in the admin
+    "site_url": "/",  # Ensure the 'View site' link points to your homepage
+}
+
+# Jazzmin UI color theme customization (professional light)
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",  # Professional, clean light theme
+    "dark_mode_theme": "",
+    "navbar": "navbar-dark bg-primary",
+    "sidebar": "sidebar-dark-primary",
+    "accent": "accent-primary",
+    "actions_sticky_top": True,
+    "navbar_fixed": True,  # Make navbar fixed
+    "sidebar_fixed": True,  # Make sidebar fixed
+    "sidebar_expand": True,  # Make sidebar expandable
+    "sidebar_collapsed": True,
+}
+
+
+
 SILKY_PYTHON_PROFILER = True
 
 # Authentication
