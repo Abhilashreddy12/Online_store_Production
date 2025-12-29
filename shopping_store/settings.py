@@ -53,13 +53,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    # Cloudinary
+    'cloudinary',
+    'cloudinary_storage',
     # Custom apps
     'catalog',
     'orders',
     'customers',
     'cart',
-    
 ]
 
 
@@ -225,9 +226,20 @@ STORAGES = {
     },
 }
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Cloudinary storage for media files
+if env('CLOUDINARY_URL', default=None):
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env('CLOUDINARY_URL').split('@')[-1],
+        'API_KEY': env('CLOUDINARY_URL').split('//')[1].split(':')[0],
+        'API_SECRET': env('CLOUDINARY_URL').split(':')[2].split('@')[0],
+    }
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = ''
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
