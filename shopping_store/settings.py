@@ -39,7 +39,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Always allow Render domain and localhost
 if not ALLOWED_HOSTS or len(ALLOWED_HOSTS) == 0:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com','192.168.0.106']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1','online-store-production.onrender.com']
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com','192.168.0.106']
 
