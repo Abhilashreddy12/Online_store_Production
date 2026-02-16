@@ -34,12 +34,13 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=False)
 
-# ALLOWED_HOSTS configuration
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Always allow Render domain and localhost
-if not ALLOWED_HOSTS or len(ALLOWED_HOSTS) == 0:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1','online-store-production.onrender.com']
+RENDER_HOSTS = ['localhost', '127.0.0.1', 'online-store-production.onrender.com']
+for host in RENDER_HOSTS:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'online-store-qke4.onrender.com','192.168.0.106']
 
